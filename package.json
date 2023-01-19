@@ -17,9 +17,19 @@
     "commands": [
       {
         "command": "dart-function-params-changer.helloWorld",
-        "title": "Hello World"
+        "title": "Convert function param type"
       }
-    ]
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "dart-function-params-changer.helloWorld",
+          "alt": "markdown.showPreviewToSide",
+          "group": "navigation",
+          "when": "editorHasSelection"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
