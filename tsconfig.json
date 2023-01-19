@@ -12,5 +12,9 @@
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
 		"noUnusedParameters": true,
-	}
+	},
+	"exclude": [
+		"jest.config.ts",
+		"**/*.test.ts"
+	]
 }
