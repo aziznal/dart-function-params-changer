@@ -20,10 +20,16 @@ export abstract class Parser {
 
 export class ParserImpl implements Parser {
     parseFunctionFromRaw(raw: string): FunctionDefinition {
-        console.log(raw.split('(')[0].split(' '));
-        const functionName = raw.split('(')[0].split(' ')[1];
+        const regex =
+            /(?<functionName>\w+)\t*[ ]*\([ ]*[\r\n]?\t*[ ]*(?<functionParams>.*)[\r\n]?.*\)/;
 
-        console.log(functionName);
+        const extracted = raw.match(regex);
+
+        if (extracted === null) {
+            throw Error('could not parse function');
+        }
+
+        const [_, functionName, functionParams] = extracted;
 
         return new FunctionDefinition(functionName, []);
     }
