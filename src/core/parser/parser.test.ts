@@ -1,9 +1,6 @@
-import {
-    Parser,
-    ParserImpl,
-    FunctionDefinition,
-    FunctionParam,
-} from './parser';
+import { FunctionDefinition } from '../models/function-definition';
+import { FunctionParam } from '../models/function-param';
+import { Parser, ParserImpl } from './parser';
 
 describe('Parser', () => {
     let parser: Parser;

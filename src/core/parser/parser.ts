@@ -1,14 +1,5 @@
-export class FunctionParam {
-    constructor(
-        public name: string,
-        public type?: string,
-        public defaultValue?: string
-    ) {}
-}
-
-export class FunctionDefinition {
-    constructor(public functionName: string, public params: FunctionParam[]) {}
-}
+import { FunctionDefinition } from '../models/function-definition';
+import { FunctionParam } from '../models/function-param';
 
 export abstract class Parser {
     abstract parseFunction(raw: string): FunctionDefinition;
