@@ -1,6 +1,11 @@
 import { FunctionDefinition } from '../models/function-definition';
 import { FunctionParam } from '../models/function-param';
 
+import '../../extensions/string-extensions';
+
+/**
+ * Parses given raw string to extract a function definition
+ */
 export abstract class Parser {
     abstract parseFunction(raw: string): FunctionDefinition;
 }
@@ -23,6 +28,13 @@ export class ParserImpl implements Parser {
         return new FunctionDefinition(functionName, parsedParams);
     }
 
+    /**
+     * Finds type of params and returns a parsed param array.
+     *
+     * For optional params, It's assumed that it's always a mix of positional
+     * and optional params. They are parsed by first parsing the positional
+     * params, then the optional params, then combining the two arrays.
+     */
     #parseParams(rawParams: string): FunctionParam[] {
         const paramsType = this.#detectParamsType(rawParams);
 
@@ -39,6 +51,13 @@ export class ParserImpl implements Parser {
         return this.#parseNamedParams(rawParams);
     }
 
+    /**
+     * Detects type of params from given string.
+     *
+     * - **named** params always include left and right curly braces `{}`
+     * - **positional** params can mixed together with **optional** params,
+     *   which always include left and right square brackets `[]`
+     */
     #detectParamsType(
         rawParams: string
     ): 'positional' | 'positional-with-optional' | 'named' {
@@ -61,7 +80,7 @@ export class ParserImpl implements Parser {
         return rawParams
             .replace(/\[.*/g, '') // remove any optional params
             .trim()
-            .replace(/ +(?= )/g, '') // replace multiple whitespaces with only one
+            .removeMultipleWhitespaces()
             .split(',')
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
@@ -80,7 +99,7 @@ export class ParserImpl implements Parser {
             .replace(/.*\[/g, '') // remove everything before the optional params
             .replace(/\]/g, '')
             .trim()
-            .replace(/ +(?= )/g, '') // replace multiple whitespaces with only one
+            .removeMultipleWhitespaces()
             .split(',')
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
@@ -112,7 +131,7 @@ export class ParserImpl implements Parser {
             .replace(/{|}/g, '') // remove curly braces
             .replace(/required /g, '')
             .trim()
-            .replace(/ +(?= )/g, '') // replace multiple whitespaces with only one
+            .removeMultipleWhitespaces()
             .split(',')
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
