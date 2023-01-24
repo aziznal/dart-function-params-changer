@@ -1,9 +1,24 @@
-abstract class ParamConverter {
-    abstract convert(fn: string): string;
+import { FunctionParam } from '../models/function-param';
+
+export abstract class ParamConverter {
+    abstract toNamedParams(params: FunctionParam[]): string[];
+
+    abstract toPositionalParams(params: FunctionParam[]): string[];
 }
 
-class ParamConverterImpl implements ParamConverter {
-    convert(fn: string): string {
-        return fn;
+export class ParamConverterImpl implements ParamConverter {
+    toNamedParams(params: FunctionParam[]): string[] {
+        params;
+        return [];
+    }
+
+    toPositionalParams(params: FunctionParam[]): string[] {
+        return params.map((param) => {
+            if (param.defaultValue !== undefined) {
+                return `${param.name}=${param.defaultValue}`;
+            }
+
+            return `required ${param.type} ${param.name}`;
+        });
     }
 }
