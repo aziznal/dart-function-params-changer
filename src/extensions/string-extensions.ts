@@ -8,7 +8,7 @@ interface String {
      * '   white   space    '.removeMultipleWhitespaces()
      * ```
      *
-     * reults in `' white space '`
+     * results in `' white space '`
      */
     removeMultipleWhitespaces(): string;
 }
