@@ -41,7 +41,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                '[param1="foo"]',
+                '[param1 = "foo"]',
         );
 
         // Two params with default value
@@ -53,7 +53,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                '[param1="foo", param2="bar"]',
+                '[param1 = "foo", param2 = "bar"]',
         );
 
         // Mix of required and optional params
@@ -67,7 +67,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                'string param1, string param2, [param3="Foo", param4="Foo"]'
+                'string param1, string param2, [param3 = "Foo", param4 = "Foo"]'
         );
 
         // One param with no type and no default value (i.e dynamic)
@@ -92,7 +92,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                'param1, int param2, [param3="Foo", param4="Foo"]',
+                'param1, int param2, [param3 = "Foo", param4 = "Foo"]',
         );
     });
 
@@ -139,7 +139,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                '{param1="foo"}',
+                '{param1 = "foo"}',
         );
 
         // // Two params with default value
@@ -151,7 +151,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                '{param1="foo", param2="bar"}',
+                '{param1 = "foo", param2 = "bar"}',
         );
 
         // // Mix of required and optional params
@@ -165,7 +165,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                '{required string param1, required string param2, param3="Foo", param4="Foo"}'
+                '{required string param1, required string param2, param3 = "Foo", param4 = "Foo"}'
         );
 
         // // One param with no type and no default value (i.e dynamic)
@@ -190,7 +190,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-                '{required param1, required int param2, param3="Foo", param4="Foo"}',
+                '{required param1, required int param2, param3 = "Foo", param4 = "Foo"}',
         );
     });
 });

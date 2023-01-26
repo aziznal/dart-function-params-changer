@@ -49,7 +49,7 @@ export class ParamConverterImpl implements ParamConverter {
      */
     #parseAsOptionalParams(params: FunctionParam[]): string {
         return params
-            .map((param) => `${param.name}=${param.defaultValue}`)
+            .map((param) => `${param.name} = ${param.defaultValue}`)
             .join(', ');
     }
 
@@ -75,7 +75,7 @@ export class ParamConverterImpl implements ParamConverter {
         return params
             .map((param) => {
                 if (param.defaultValue) {
-                    return `${param.name}=${param.defaultValue}`;
+                    return `${param.name} = ${param.defaultValue}`;
                 }
 
                 if (param.type) {
