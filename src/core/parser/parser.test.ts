@@ -241,5 +241,16 @@ describe('Parser', () => {
                 ]
             )
         );
+
+        // with two params with default values (without types) and spaces before and after equals sign
+        expect(parser.parseFunction('foo({param1 = 3, param2 = "3",}) {}')).toEqual(
+            new FunctionDefinition(
+                'foo',
+                [
+                    new FunctionParam('param1', undefined, "3"),
+                    new FunctionParam('param2', undefined, '"3"'),
+                ]
+            )
+        );
     });
 });

@@ -82,11 +82,16 @@ export class ParserImpl implements Parser {
             .trim()
             .removeMultipleWhitespaces()
             .split(',')
+            .map((param) => param.trimEqualsSignSpacing())
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
             .map((param) => param.split(' '))
             .map(
-                (splitParam) => new FunctionParam(splitParam[1], splitParam[0])
+                (splitParam) =>
+                    new FunctionParam(
+                        /*name*/ splitParam[1],
+                        /*type*/ splitParam[0]
+                    )
             );
     }
 
@@ -101,6 +106,7 @@ export class ParserImpl implements Parser {
             .trim()
             .removeMultipleWhitespaces()
             .split(',')
+            .map((param) => param.trimEqualsSignSpacing())
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
             .map((param) => param.split(' ')) // get type-name pairs
@@ -108,16 +114,16 @@ export class ParserImpl implements Parser {
                 // if no type given
                 if (typeNamePair.length === 1) {
                     return new FunctionParam(
-                        typeNamePair[0].split('=')[0],
-                        undefined,
-                        typeNamePair[0].split('=')[1]
+                        /* name*/ typeNamePair[0].split('=')[0],
+                        /* type*/ undefined,
+                        /* default value*/ typeNamePair[0].split('=')[1]
                     );
                 }
 
                 return new FunctionParam(
-                    typeNamePair[1].split('=')[0],
-                    typeNamePair[0],
-                    typeNamePair[1].split('=')[1]
+                    /* name*/ typeNamePair[1].split('=')[0],
+                    /* type*/ typeNamePair[0],
+                    /* default value*/ typeNamePair[1].split('=')[1]
                 );
             });
     }
@@ -133,6 +139,7 @@ export class ParserImpl implements Parser {
             .trim()
             .removeMultipleWhitespaces()
             .split(',')
+            .map((param) => param.trimEqualsSignSpacing())
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
             .map((param) => param.split(' '))
