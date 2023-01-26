@@ -18,9 +18,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-            [
-                'required int param1'
-            ],
+            'int param1'
         );
         
         // Two params with type
@@ -32,10 +30,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-            [
-                'required int param1',
-                'required string param2'
-            ],
+                'int param1, string param2',
         );
 
         // One param with default value
@@ -46,9 +41,7 @@ describe('Param Converter', () => {
                 ]
             ),
         ).toEqual(
-            [
-                'param1="foo"',
-            ],
+                '[param1="foo"]',
         );
 
         // Two params with default value
@@ -56,33 +49,50 @@ describe('Param Converter', () => {
             paramConverter.toPositionalParams(
                 [
                     new FunctionParam('param1', undefined, '"foo"'),
-                    new FunctionParam('param2', undefined, '42'),
+                    new FunctionParam('param2', undefined, '"bar"'),
                 ]
             ),
         ).toEqual(
-            [
-                'param1="foo"',
-                'param2=42',
-            ],
+                '[param1="foo", param2="bar"]',
         );
 
-        // Multiple params with types and / or default values
+        // Mix of required and optional params
         expect(
             paramConverter.toPositionalParams(
                 [
-                    new FunctionParam('param1', undefined, '"foo"'),
-                    new FunctionParam('param2', undefined, '42'),
-                    new FunctionParam('param3', 'int', '123'),
-                    new FunctionParam('param4', 'int'),
+                    new FunctionParam('param1', 'string'),
+                    new FunctionParam('param2', 'string'),
+                    new FunctionParam('param3', undefined, '"Foo"'),
+                    new FunctionParam('param4', undefined, '"Foo"'),
                 ]
             ),
         ).toEqual(
-            [
-                'param1="foo"',
-                'param2=42',
-                'param3=123',
-                'required int param4',
-            ],
+                'string param1, string param2, [param3="Foo", param4="Foo"]'
+        );
+
+        // One param with no type and no default value (i.e dynamic)
+        expect(
+            paramConverter.toPositionalParams(
+                [
+                    new FunctionParam('param1'),
+                ]
+            ),
+        ).toEqual(
+                'param1',
+        );
+
+        // Mix of param with no type, param with type, param with default value, and param with type and default value
+        expect(
+            paramConverter.toPositionalParams(
+                [
+                    new FunctionParam('param1'),
+                    new FunctionParam('param2', 'int'),
+                    new FunctionParam('param3', undefined, '"Foo"'),
+                    new FunctionParam('param4', "string", '"Foo"'),
+                ]
+            ),
+        ).toEqual(
+                'param1, int param2, [param3="Foo", param4="Foo"]',
         );
     });
 });
