@@ -16,4 +16,14 @@ describe('String Extensions', () => {
             '  w  h  i  t  e  s  p  a  c  e  '.removeMultipleWhitespaces()
         ).toBe(' w h i t e s p a c e ');
     });
+
+    it('Removes spaces before and after an equals sign', () => {
+        expect(' = '.trimEqualsSignSpacing()).toBe('=');
+
+        expect('= '.trimEqualsSignSpacing()).toBe('=');
+
+        expect(' ='.trimEqualsSignSpacing()).toBe('=');
+
+        expect('  =  '.trimEqualsSignSpacing()).toBe('=');
+    });
 });
