@@ -1,15 +1,16 @@
 import { FunctionParam } from '../models/function-param';
 
 export abstract class ParamConverter {
-    abstract toNamedParams(params: FunctionParam[]): string[];
+    abstract toNamedParams(params: FunctionParam[]): string;
 
     abstract toPositionalParams(params: FunctionParam[]): string;
 }
 
 export class ParamConverterImpl implements ParamConverter {
-    toNamedParams(params: FunctionParam[]): string[] {
-        params;
-        return [];
+    toNamedParams(params: FunctionParam[]): string {
+        const parsedParams = this.#parseAsNamedParams(params);
+
+        return `{${parsedParams}}`;
     }
 
     toPositionalParams(params: FunctionParam[]): string {
@@ -63,6 +64,25 @@ export class ParamConverterImpl implements ParamConverter {
                 }
 
                 return `${param.type} ${param.name}`;
+            })
+            .join(', ');
+    }
+
+    /**
+     * Returns a string of named params. Curly braces **{NOT}** included
+     */
+    #parseAsNamedParams(params: FunctionParam[]): string {
+        return params
+            .map((param) => {
+                if (param.defaultValue) {
+                    return `${param.name}=${param.defaultValue}`;
+                }
+
+                if (param.type) {
+                    return `required ${param.type} ${param.name}`;
+                }
+
+                return `required ${param.name}`;
             })
             .join(', ');
     }
