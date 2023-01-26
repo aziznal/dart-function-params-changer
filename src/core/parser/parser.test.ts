@@ -77,7 +77,12 @@ describe('Parser', () => {
             new FunctionDefinition('foo', [])
         );
 
-        // with one basic param
+        // with one non-typed param
+        expect(parser.parseFunction('foo(param1) {}')).toEqual(
+            new FunctionDefinition('foo', [new FunctionParam('param1')])
+        );
+
+        // with one typed param
         expect(parser.parseFunction('foo(int param1) {}')).toEqual(
             new FunctionDefinition('foo', [new FunctionParam('param1', 'int')])
         );
@@ -160,7 +165,18 @@ describe('Parser', () => {
             ])
         );
 
-        // with optional params without a type
+        // with optional params without a default value and without a type
+        expect(
+            parser.parseFunction('foo(int param1, int param2, [foo]) {}')
+        ).toEqual(
+            new FunctionDefinition('foo', [
+                new FunctionParam('param1', 'int'),
+                new FunctionParam('param2', 'int'),
+                new FunctionParam('foo'),
+            ])
+        );
+
+        // with optional params with a default value but without a type
         expect(
             parser.parseFunction(
                 'foo(int param1, int param2, [foo=1, foo2="2"]) {}'
@@ -178,6 +194,16 @@ describe('Parser', () => {
     // prettier-ignore
     it("Parses a function's named params", () => {
         // with one param
+        expect(parser.parseFunction('foo({param1}) {}')).toEqual(
+            new FunctionDefinition(
+                'foo',
+                [
+                    new FunctionParam('param1')
+                ]
+            )
+        );
+
+        // with one typed param
         expect(parser.parseFunction('foo({int param1}) {}')).toEqual(
             new FunctionDefinition(
                 'foo',

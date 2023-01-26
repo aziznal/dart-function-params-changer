@@ -86,13 +86,17 @@ export class ParserImpl implements Parser {
             .filter((param) => param.length > 0) // to account for trailing commas
             .map((param) => param.trim())
             .map((param) => param.split(' '))
-            .map(
-                (splitParam) =>
-                    new FunctionParam(
-                        /*name*/ splitParam[1],
-                        /*type*/ splitParam[0]
-                    )
-            );
+            .map((splitParam) => {
+                // dynamic param
+                if (splitParam.length === 1) {
+                    return new FunctionParam(splitParam[0]);
+                }
+
+                return new FunctionParam(
+                    /*name*/ splitParam[1],
+                    /*type*/ splitParam[0]
+                );
+            });
     }
 
     #parseOptionalParams(rawParams: string): FunctionParam[] {
@@ -111,8 +115,19 @@ export class ParserImpl implements Parser {
             .map((param) => param.trim())
             .map((param) => param.split(' ')) // get type-name pairs
             .map((typeNamePair) => {
+                // case 1: dynamic type with no default value
+                if (
+                    typeNamePair.length === 1 &&
+                    typeNamePair[0].split('=').length === 1
+                ) {
+                    return new FunctionParam(typeNamePair[0]);
+                }
+
                 // if no type given
-                if (typeNamePair.length === 1) {
+                if (
+                    typeNamePair.length === 1 &&
+                    typeNamePair[0].split('=').length === 2
+                ) {
                     return new FunctionParam(
                         /* name*/ typeNamePair[0].split('=')[0],
                         /* type*/ undefined,
